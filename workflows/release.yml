@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      changelog:
+        description: Changelog, use \n for newlines
+        type: string
+        required: false
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Changelog
+        run: |
+          mkdir changelog
+          
+          echo -e "${{ inputs.changelog }}" >> changelog/changelog.md
+          
+          echo "Changelog:"
+          cat changelog/changelog.md
+          echo ""
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: changelog
+          path: changelog/changelog.md
+
